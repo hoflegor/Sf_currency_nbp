@@ -2,10 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Entity\currency;
+use AppBundle\Entity\Currency;
 
 class CurrencyController extends Controller
 {
@@ -15,42 +16,87 @@ class CurrencyController extends Controller
     public function showAllCurrenciesAction()
     {
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.nbp.pl/api/exchangerates/tables/a');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        $resp = curl_exec($ch);
 
-        curl_close($ch);
+        $em = $this->getDoctrine()->getManager();
 
-        $data = json_decode($resp);
+        $repo = $em->getRepository('AppBundle:Currency');
+
+
+        $last = $repo->getLastDate();
+
+        $last->format('Y-m-d H:i:s');
+
+//        return new Response(var_dump($last));
+
+        $current = new \DateTime();
+
+        $diff = date_diff($last, $current)->days;
 
         $currencies = [];
 
-        foreach ($data[0]->rates as $rate) {
+        if ($diff > 0) {
 
-            $currencies[] = ['name'=>$rate->currency, 'code'=>$rate->code, 'mid'=>$rate->mid];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'http://api.nbp.pl/api/exchangerates/tables/a');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            $newCurrency = new currency();
+            $resp = curl_exec($ch);
 
-            $newCurrency->setName($rate->currency);
-            $newCurrency->setCode($rate->code);
-            $newCurrency->setMidCourse($rate->mid);
-            $newCurrency->setDate(new \DateTime());
+            curl_close($ch);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newCurrency);
-            $em->flush();
+            $data = json_decode($resp);
+
+
+            foreach ($data[0]->rates as $rate) {
+
+                $name = $rate->currency;
+                $code = $rate->code;
+                $mid = $rate->mid;
+
+                $currencies[] = ['name' => $name, 'code' => $code, 'mid' => $mid];
+
+                $newCurrency = new Currency();
+
+                $newCurrency->setName($name);
+                $newCurrency->setCode($code);
+                $newCurrency->setMidCourse($mid);
+                $newCurrency->setDate(new \DateTime());
+
+                $em->persist($newCurrency);
+                $em->flush();
+
+            }
+
+            $update = $current;
+
+
+        } else {
+            $update = $last;
+
+            $currencyTable= $repo->findAll();
+
+
+
+            foreach ($currencyTable as $item){
+
+                $currencies[] = ['name'=>$item->getName(),  'code'=>$item->getCode(), 'mid'=>$item->getMidCourse()];
+
+
+            }
+
 
 
         }
 
-//        return new Response(var_dump($currencies));
+        $update = $update->format('Y-m-d H:i:s');
+
+/// ////////////////////////
 
         return $this->render(
             'AppBundle:Currency:show_all_currencies.html.twig',
-            array('currencies' => $currencies)
+            array('currencies' => $currencies, 'update' => $update)
         );
     }
 
@@ -61,7 +107,7 @@ class CurrencyController extends Controller
     {
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.nbp.pl/api/exchangerates/rates/a/' . $code);
+        curl_setopt($ch, CURLOPT_URL, 'http://api.nbp.pl/api/exchangerates/rates/a/'.$code);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -69,9 +115,21 @@ class CurrencyController extends Controller
 
         curl_close($ch);
 
-        $currency = json_decode($resp)->rates[0]->mid;
+        $curCourse = json_decode($resp)->rates[0]->mid;
 
-        return new Response(var_dump( $currency));
+        $em = $this->getDoctrine()->getManager();
+        $firstDate = $em->getRepository('AppBundle:Currency')->findFirstDateByCode($code);
+        $firstDate = $firstDate->format('Y-m-d H:i:s');
+
+        $avgCourse = $em->getRepository('AppBundle:Currency')->getAverageCourseByCode($code);
+        $avgCourse = $avgCourse[0][1];
+
+//        return new Response(var_dump($avgCourse));
+
+        return $this->render(
+            'AppBundle:Currency:show_currency.html.twig',
+            array('code' => $code, 'curCourse' => $curCourse, 'firstDate' => $firstDate, 'avgCourse' => $avgCourse)
+        );
 
     }
 

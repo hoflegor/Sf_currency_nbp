@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * currency
  *
  * @ORM\Table(name="currency")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\currencyRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CurrencyRepository")
  */
-class currency
+class Currency
 {
     /**
      * @var int

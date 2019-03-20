@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Waluta {{ code }}{% endblock %}
+
+{% block body %}
+
+    <h1>Kurs waluty {{ code }} </h1>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Bieżący kurs:</strong><br>{{ curCourse }} PLN</li>
+        <li class="list-group-item"><strong>Średni kurs <small>(od {{ firstDate }})</small>: </strong><br>{{ avgCourse }}</li>
+    </ul>
+
+    <a class="btn btn-large btn-secondary m-2" href="{{ path('showAllCurrencies')}}">Powrót do listy walut</a>
+
+{% endblock %}

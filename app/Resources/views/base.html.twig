@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>{% block title %}Waluty NBP{% endblock %}</title>
+    <title>{% block title %}Waluty NBP{% endblock %}</title>
 
+    {% block stylesheets %}
         <link rel="stylesheet" href="https://bootswatch.com/4/solar/bootstrap.css">
+        {#
+          * Bootswatch v4.3.1
+          * Homepage: https://bootswatch.com
+          * Copyright 2012-2019 Thomas Park
+          * Licensed under MIT
+          * Based on Bootstrap
+          *//*!
+          * Bootstrap v4.3.1 (https://getbootstrap.com/)
+          * Copyright 2011-2019 The Bootstrap Authors
+          * Copyright 2011-2019 Twitter, Inc.
+          * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+    */#}
+    {% endblock %}
 
-        {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body>
+{% block body %}
+    <h1>Waluty NBP</h1>
 
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}
-            <h1>Waluty NBP</h1>
+    <div>
+        <a class="btn btn-large btn-secondary" href="{{ path('showAllCurrencies') }}">Pobierz kursy NBP</a>
+    </div>
 
-            <div >
-                <a class="btn btn-large btn-secondary" href="{{ path('showAllCurrencies') }}">Pobierz kursy NBP</a>
-            </div>
-
-        {% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
 </html>

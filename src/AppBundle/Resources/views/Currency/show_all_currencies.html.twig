@@ -1,11 +1,14 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}AppBundle:Currency:showAllCurrencies{% endblock %}
+{% block title %}Lista walut{% endblock %}
 
 {% block body %}
     <h1>Lista dostępnych walut wraz z kodem waluty</h1>
 
-    <h3>Pobrano kursy walut</h3>
+    <h3>Pobrano kursy walut {{ update }}</h3>
+
+    <a class="btn btn-outline-info m-4"  onclick='window.location.reload()'>Odśwież</a>
+    <p class="help-block" >Odświeżenie kursów walut jest możliwe raz na 24 godziny </p>
 
     <table class="table table-hover d-flex">
         <tr>
@@ -22,8 +25,17 @@
 
                 {% for item, param in val %}
 
+                    {% if item == 'name' %}
+                        <td> {{ param }} </td>
+                     {% elseif item == 'code' %}
+                         <td> {{ param }}</td>
+                        <td>
+                            <a class="btn btn-large btn-secondary" href="{{ path('showCurrency', {'code': param}) }}">
+                                Szczegóły
+                            </a>
+                        </td>
+                    {% endif %}
 
-                   <hr> {{ item }} -> {{ param }}<hr>
                 {% endfor %}
 
             </tr>
