@@ -3,18 +3,33 @@
 {% block title %}AppBundle:Currency:showAllCurrencies{% endblock %}
 
 {% block body %}
-    <h1>Welcome to the Currency:showAllCurrencies page</h1>
+    <h1>Lista dostępnych walut wraz z kodem waluty</h1>
 
-    <ol>
+    <h3>Pobrano kursy walut</h3>
 
-        {% for item in data %}
-            <li><br>
-                {% for key, val in item %}
-                    {{ key }} ---> {{ val }} <br>
+    <table class="table table-hover d-flex">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Waluta</th>
+            <th scope="col">Kod</th>
+            <th scope="col"></th>
+        </tr>
+
+        {% for key, val in currencies %}
+
+            <tr>
+                <th scope="col"> {{ key + 1}} </th>
+
+                {% for item, param in val %}
+
+
+                   <hr> {{ item }} -> {{ param }}<hr>
                 {% endfor %}
-            </li>
-            <br>
+
+            </tr>
+
         {% endfor %}
-    </ol>
+
+    </table>
 
 {% endblock %}

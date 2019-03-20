@@ -2,12 +2,25 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>{% block title %}Waluty NBP{% endblock %}</title>
+
+        <link rel="stylesheet" href="https://bootswatch.com/4/solar/bootstrap.css">
+
         {% block stylesheets %}{% endblock %}
+
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <h1>Waluty NBP</h1>
+
+            <div >
+                <a class="btn btn-large btn-secondary" href="{{ path('showAllCurrencies') }}">Pobierz kursy NBP</a>
+            </div>
+
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
