@@ -1,0 +1,20 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AppBundle:Currency:showAllCurrencies{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the Currency:showAllCurrencies page</h1>
+
+    <ol>
+
+        {% for item in data %}
+            <li><br>
+                {% for key, val in item %}
+                    {{ key }} ---> {{ val }} <br>
+                {% endfor %}
+            </li>
+            <br>
+        {% endfor %}
+    </ol>
+
+{% endblock %}
