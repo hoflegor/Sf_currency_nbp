@@ -2,6 +2,8 @@
 
 ## Zadanie rekrutacyjne - programista PHP
 
+> ## Samodzielna nauka Fremeworka symfony, Zadanie wykonane bez zastosowania REST API
+
 > ### Wstęp
 
 > Firma X zajmuje się sprzedażą produktów przez Internet. Dział IT firmy rozwija równolegle kilka systemów m.in. sklep internetowy, system magazynowy i CRM.
