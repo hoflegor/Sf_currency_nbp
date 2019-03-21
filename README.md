@@ -2,7 +2,7 @@
 
 ## Zadanie rekrutacyjne - programista PHP
 
-> ## Samodzielna nauka Fremeworka symfony, Zadanie wykonane bez zastosowania REST API
+> ## Samodzielna nauka Fremeworka symfony. Zadanie wykonane bez zastosowania API REST.
 
 > ### Wstęp
 
